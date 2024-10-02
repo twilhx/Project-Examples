@@ -1,3 +1,4 @@
+![logo](https://github.com/gzavz/Project-Examples/blob/f9be9aefc146002cd461bc34d3e55a975a0a71ac/images/project-examples-logo.svg)
 # Project Examples
 This repository will contain configurations for different services that can be deployed.
 
