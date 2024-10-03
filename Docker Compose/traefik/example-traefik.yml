@@ -1,0 +1,71 @@
+entryPoints:
+    web:
+        address: ":80"
+        http:
+            redirections: #Redirect all traffic from port 80 to 443
+                entryPoint:
+                    to: websecure
+                    scheme: https
+                    permanent: true
+
+    websecure:
+        address: ":443"
+        asDefault: true #Set port 443 as the default port
+        reusePort: true
+        http:
+            tls: #Wildcard certificate setup using cloudflare
+                certResolver: cf-resolver
+                domains:
+                    - main: "my.domain.com"
+                        sans:
+                            - "*.my.domain.com"
+    
+    minecraft:
+        address: ":25565"
+    minecraft-udp:
+        address: ":25565/udp"
+
+providers:
+    docker: #Allow local Docker routing
+        endpoint: "unix:///var/run/docker.sock"
+    file:
+        directory: "/etc/traefik" #Specify the dynamic.yaml file directory
+        watch: true #Specify to watch the file for updates.
+
+#Enable logging
+log:
+    filePath: "/var/log/traefik/traefik.log"
+    maxSize: 500 #Specify the max file size
+    maxBackups: 3 #Specify the number of backups to keep
+
+accessLog:
+    filePath: "/var/log/traefik/access.log"
+
+#Enable Traefik dashboard
+api:
+    dashboard: true
+    insecure: false
+
+global:
+    checkNewVersion: true
+    sendAnonymousUsage: false
+
+#TLS Certificates
+certificatesResolvers:
+    my-resolvers:
+        acme:
+            email: "example@email.com" #Email for registration with Let's Encrypt
+            storage: "acme.json"
+            dnsChallenge:
+                provider: dns-provider-name #Specify the DNS provider for the DNS challenge
+#Cloudflare
+    cf-resolver:
+        acme:
+            email: "change_me@email.com"
+            storage: "acme.json"
+            dnsChallenge:
+                provider: cloudflare
+                resolvers:
+                    - "1.1.1.1:53"
+                    - "1.0.0.1:53"
+                #disablePropagationCheck: true

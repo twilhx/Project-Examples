@@ -1,0 +1,10 @@
+services:
+    speedtest:
+        image: openspeedtest/latest
+        restart: unless-stopped #Start the container automatically
+        container_name: openspeedtest #Name the container "openspeedtest"
+        ports:
+            - '3000:3000' #HTTP access. Host port can be changed
+            - '3001:3001' #HTTPS access. Host port can be changed
+
+#Documentation: https://hub.docker.com/r/openspeedtest/latest, https://openspeedtest.com/selfhosted-speedtest

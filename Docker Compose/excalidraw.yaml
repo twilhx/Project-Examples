@@ -1,0 +1,8 @@
+services:
+  excalidraw:
+    image: "excalidraw/excalidraw:latest"
+    restart: always #Start the container automatically
+    ports:
+      - "5000:80" #The port used to access Excalidraw. Host port can be changed
+
+#Documentation: https://docs.excalidraw.com/docs/introduction/development, https://hub.docker.com/r/excalidraw/excalidraw

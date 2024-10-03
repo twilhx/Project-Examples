@@ -1,0 +1,85 @@
+http:
+    routers:
+        router0:
+            rule: "Host(`site-1.domain.com`)" #Specify the conditions to route. An example will be using the subdomain name
+            service: service-a #Specify the service name in the "services" section
+            entryPoints:
+                - web #Specify the incoming ports defined in the traefik.yml file
+
+        router1:
+            rule: "Host(`site-2.domain.com`)"
+            service: service-b
+            entryPoints:
+                - websecure
+            tls: {} #Specify to terminate TLS requests on the router (proxy)
+        
+        dashboard-router: #Traefik dashboard
+            rule: "Host(`proxy.domain.com`) && Path(`/dashboard/`)"
+            service: api@internal
+            middlewares: #Specify the middleware to use
+                - middleware01
+                - middleware02
+            entryPoints:
+                - websecure
+            tls: {}
+
+    services:
+        service-a:
+            loadBalancer:
+                servers:
+                    - url: "http://<IP>:<PORT>" #Specify the URL of the target service
+
+        service-b:
+            loadBalancer:
+                servers:
+                    - url: "http://<IP>:<PORT>"
+                    - url: "http://<IP>:<PORT>"
+
+    middlewares:
+        middlware01:
+                ipAllowList:
+                    sourceRange: #Specify the IP addresses that are allowed to use the service
+                        - 10.10.10.0/24
+                        - 127.0.0.1/32
+                        - 192.168.1.1
+
+        middleware02:
+            basicAuth:
+                users:
+                    - "username:hashed-password"
+                    - "test:$apr1$aKKMfSlx$.ylkR36/LnWluAJeIWkwk0"
+                    - "myuser:$apr1$Chh2tzN4$EtSpG/GkIGM/x8lfj3Jdx1"
+                #usersFile: "/etc/traefik/user-creds" #Uncomment if using a file to specify user credentials
+
+tcp:
+    routers:
+        tcprouter0:
+            rule: "ClientIP(`0.0.0.0/0`)"
+            service: mc
+            entryPoints:
+                - minecraft
+
+        services:
+            mc:
+                loadBalancer:
+                    servers:
+                        - address: "10.10.10.10:25565"
+
+udp:
+    routers:
+        minecraft-router:
+            service: service-udp-a
+            entryPoints:
+                - minecraft-udp
+    
+    services:
+        service-udp-a:
+            loadBalancer:
+                servers:
+                    - address: "10.10.10.10:25565"
+
+#Not required if using Let's Encrypt
+tls:
+    certificates:
+        - certFile: /path/to/domain.cert
+          keyFile: /path/to/domain.key

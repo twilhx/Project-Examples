@@ -1,0 +1,10 @@
+services:
+  web-server:
+    image: nginx
+    restart: always #Start the container automatically
+    ports:
+      - "8080:80" #The port used to access the web server. Host port can be changed
+    volumes:
+      - ./web-content:/usr/share/nginx/html:ro #Specify the directory where the web content is stored to be served
+
+#Documentation: https://hub.docker.com/_/nginx

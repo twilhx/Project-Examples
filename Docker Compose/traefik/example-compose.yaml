@@ -1,0 +1,46 @@
+services:
+    traefik:
+        image: traefik:v3.1
+        restart: always
+        #command:
+            #- "--api.insecure=true" #Enable the web UI on HTTP. Not required if using traefik.yml
+            #- "--providers.docker" #Listen to Docker. Not required if using traefik.yml
+        ports:
+            - "80:80"
+            - "443:443"
+            - "8080:8080" #Traefik dashboard
+            #Additional ports if required
+            #- "25565:25565/udp"
+            #- "25565:25565"
+        volumes:
+            - /etc/localtime:/etc/localtime:ro #Set the timezone for Traefik
+            - /var/run/docker.sock:/var/run/docker.sock:ro
+            - ./traefik-data/traefik.yml:/etc/traefik/traefik.yml:ro #Not required for simple single host deployment
+            - ./traefik-data/dynamic.yaml:/etc/traefik/dynamic.yaml:ro #Not required for simple single host deployment
+            - ./traefik-data/user-creds:/etc/traefik/user-creds:ro #Pass user credentials for BasicAuth "username:password-hash" format
+            - ./traefik-data/acme:/etc/traefik/acme #Used to store TLS certificates if using Let's Encrypt
+            - ./traefik-data/logs:/var/log/traefik/ #Used for storing logs
+        environment:
+            - CF_DNS_API_TOKEN=api_token_change_me #Used for DNS challenge for Let's Encrypt
+
+#Nginx with load balancing example
+    nginx:
+        image: nginx:latest
+        restart: always
+        volumes:
+            - ./web:/usr/share/nginx/html:ro
+        deploy:
+            mode: replicated
+            replicas: 2
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.nginx.rule=Host(`site.domain.com`)" #Specify the conditions to route the traffic. In this example, sub domain name
+            - "traefik.http.routers.nginx.entrypoints=websecure" 
+            - "traefik.http.routers.nginx.tls=true" #Enable TLS
+            - "traefik.http.routers.nginx.middlewares=my-ipallowlist" #Specify the middlewares to use.
+            - "traefik.http.middlewares.my-ipallowlist.ipallowlist.sourcerange=127.0.0.1, 172.16.1.0/24, 192.168.0.0/16" #Specify allowed IP addresses
+
+
+#Documentation:
+#https://doc.traefik.io/traefik/providers/docker/
+#https://doc.traefik.io/traefik/providers/file/
