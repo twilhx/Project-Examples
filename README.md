@@ -4,3 +4,6 @@ This repository will contain configurations for different services that can be d
 
 ## Important Notes
 It is important to note that configurations provided here are only examples and should be thoroughly reviewed before being deployed.
+
+## Contact
+For any queries or issues, please email me at [connect@gohspace.com](mailto:connect@gohspace.com?subject=Project-Examples).
