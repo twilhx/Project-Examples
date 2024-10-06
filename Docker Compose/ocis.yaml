@@ -1,0 +1,22 @@
+services:
+  ocis:
+    image: owncloud/ocis:latest
+    restart: always
+    entrypoint:
+      - /bin/sh
+    command: ["-c", "ocis init || true; ocis server"] #Initial setup. Will return an error if the config files are already present
+    ports:
+      - "9200:9200"
+    volumes:
+      - ./ocis-config:/etc/ocis
+      - ./ocis-data:/var/lib/ocis
+    environment:
+      - OCIS_INSECURE=true #Required if using self-signed certificates
+      - PROXY_HTTP_ADDR=0.0.0.0:9200 #Specify the upstream proxy IP address. Set 0.0.0.0 for wildcard to allow all
+      - OCIS_URL=https://<ocis domain>:9200 #Specify the domain that will be used with OCIS i.e. https://ocis.home.arpa or https://192.168.1.1:9200
+      - OCIS_SHARING_PUBLIC_WRITEABLE_SHARE_MUST_HAVE_PASSWORD=false #Disable the password requirement on public sharing links.
+      #- SETTINGS_BUNDLES_PATH=/etc/ocis/file_name.json #Required if using custom roles in ocis. Store the file in the /ocis-config directory
+
+#Note that when starting running the container after the first setup, an error will be triggered by the command. It can be safely ignored or commented out after the first initialisation.
+#To obtain the admin password on initial start, run the "sudo docker log <ocis container name>" command or read the config file located at "/ocis-config/ocis.yaml"
+#Documentation: https://doc.owncloud.com/ocis/next/, https://doc.owncloud.com/ocis/next/deployment/services/s-list/frontend.html
