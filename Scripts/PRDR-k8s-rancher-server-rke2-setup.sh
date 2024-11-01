@@ -75,12 +75,4 @@ helm install rancher rancher-stable/rancher --namespace cattle-system --set host
 
 echo "${green}RKE2 and Rancher Server installation completed. Binaries can be found at${clear} ${blue}/var/lib/rancher/rke2/bin/${clear}."
 
-#Create the required directories and configuration files before running this script:
-#sudo mkdir -p /etc/rancher/rke2/
-#sudo nano /etc/rancher/rke2/config.yaml
-#config.yaml contents:
-#token: <secret>
-#tls-san:
-#   - <IP or FQDN>
-
 #Web UI can be accessed at https://<FQDN>/ after Rancher Server installation
