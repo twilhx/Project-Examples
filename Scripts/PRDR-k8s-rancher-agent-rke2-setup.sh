@@ -43,10 +43,3 @@ sudo systemctl enable rke2-agent.service
 sudo systemctl start rke2-agent.service
 
 echo "${green}RKE Agent installation completed.${clear}"
-
-#Create the required directories and configuration files before running this script:
-#sudo mkdir -p /etc/rancher/rke2/
-#sudo nano /etc/rancher/rke2/config.yaml
-#config.yaml contents:
-#server: https://<IP or FQDN>:9345
-#token: <secret>
