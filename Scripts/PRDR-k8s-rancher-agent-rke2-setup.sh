@@ -43,3 +43,5 @@ sudo systemctl enable rke2-agent.service
 sudo systemctl start rke2-agent.service
 
 echo "${green}RKE Agent installation completed.${clear}"
+
+#Documentation: https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/rke2-for-rancher, https://docs.rke2.io/

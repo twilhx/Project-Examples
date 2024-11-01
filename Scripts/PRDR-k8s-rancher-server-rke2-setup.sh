@@ -76,3 +76,5 @@ helm install rancher rancher-stable/rancher --namespace cattle-system --set host
 echo "${green}RKE2 and Rancher Server installation completed. Binaries can be found at${clear} ${blue}/var/lib/rancher/rke2/bin/${clear}."
 
 #Web UI can be accessed at https://<FQDN>/ after Rancher Server installation
+
+#Documentation: https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/rke2-for-rancher, https://docs.rke2.io/
