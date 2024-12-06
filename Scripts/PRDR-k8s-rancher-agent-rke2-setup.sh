@@ -12,15 +12,8 @@ file_rke2_config="config.yaml"
 usr_id=$(id -u)
 
 #Prompt for required information
-echo "${cyan}Enter the TLS-SAN to connect to RKE2 (i.e., https://rancher.domain.com:9345):${clear}"
-read domain
-
-echo "${cyan}Enter the token to use:${clear}"
-read rke2t
-
-#Force the values to be a string
-rke2_domain="$domain"
-rke2_token="$rke2t"
+read -p "Enter the TLS-SAN to connect to RKE2 (i.e., https://rancher.domain.com:9345): " rke2_domain
+read -p "Enter the token to use: " rke2_token
 
 #Create the required directories and files
 echo "${blue}[+] Creating required directories and files${clear}"
@@ -43,5 +36,12 @@ sudo systemctl enable rke2-agent.service
 sudo systemctl start rke2-agent.service
 
 echo "${green}RKE Agent installation completed.${clear}"
+
+#Required directories and configuration files for this script:
+#sudo mkdir -p /etc/rancher/rke2/
+#sudo nano /etc/rancher/rke2/config.yaml
+#config.yaml contents:
+#server: https://<IP or FQDN>:9345
+#token: <secret>
 
 #Documentation: https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/rke2-for-rancher, https://docs.rke2.io/

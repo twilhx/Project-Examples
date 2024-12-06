@@ -12,19 +12,9 @@ file_rke2_config="config.yaml"
 usr_id=$(id -u)
 
 #Prompt for required information
-echo "${cyan}Enter the domain to use for Rancher Server (i.e., rancher.domain.com):${clear}"
-read domain
-
-echo "${cyan}Enter the token to use:${clear}"
-read rke2t
-
-echo "${cyan}Enter the TLS-SAN to use:${clear}"
-read rke2ts
-
-#Force the values to be a string
-rke2_domain="$domain"
-rke2_token="$rke2t"
-rke2_tls_san="$rke2ts"
+read -p "Enter the domain to use for Rancher Server (i.e., rancher.domain.com): " rke2_domain
+read -p "Enter the token to use: " rke2_token
+read -p "Enter the TLS-SAN to use: " rke2_tls_san
 
 #Create the required directories and files
 echo "${blue}[+] Creating required directories and files${clear}"
@@ -75,6 +65,13 @@ helm install rancher rancher-stable/rancher --namespace cattle-system --set host
 
 echo "${green}RKE2 and Rancher Server installation completed. Binaries can be found at${clear} ${blue}/var/lib/rancher/rke2/bin/${clear}."
 
-#Web UI can be accessed at https://<FQDN>/ after Rancher Server installation
+#Required directories and configuration files for this script:
+#sudo mkdir -p /etc/rancher/rke2/
+#sudo nano /etc/rancher/rke2/config.yaml
+#config.yaml contents:
+#token: <secret>
+#tls-san:
+#   - <IP or FQDN>
 
+#Web UI can be accessed at https://<FQDN>/ after Rancher Server installation
 #Documentation: https://ranchermanager.docs.rancher.com/how-to-guides/new-user-guides/kubernetes-cluster-setup/rke2-for-rancher, https://docs.rke2.io/
