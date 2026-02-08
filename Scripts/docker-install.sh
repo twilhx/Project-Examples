@@ -8,6 +8,7 @@ green="\e[32m"
 blue="\e[34m"
 clear="\e[0m"
 oscheck=$(cat /etc/os-release | grep -w "ID=*")
+osname="${oscheck#ID=}"
 
 debian_install(){
     echo "${blue}[+] Debian distribution detected. Installing Docker for Debian..."
@@ -61,10 +62,10 @@ ubuntu_install(){
     echo "${green}[+] Docker installation completed.${clear}"
 }
 
-if [$oscheck -eq *"debian"*]
+if [ "$osname" -eq "debian" ] 2>/dev/null
 then
     debian_install
-elif [$oscheck -eq *"ubuntu"*]
+elif ["$osname" -eq "ubuntu"] 2>/dev/null
 then
     ubuntu_install
 else
