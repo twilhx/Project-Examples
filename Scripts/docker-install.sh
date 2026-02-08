@@ -9,7 +9,7 @@ blue="\e[34m"
 clear="\e[0m"
 oscheck=$(cat /etc/os-release | grep -w "ID=*")
 
-debian_install() {
+debian_install(){
     echo "${blue}[+] Debian distribution detected. Installing Docker for Debian..."
 
     #Install necessary dependencies
@@ -35,7 +35,7 @@ debian_install() {
     echo "${green}[+] Docker installation completed.${clear}"
 }
 
-ubuntu_install() {
+ubuntu_install(){
     echo "${blue}[+] Ubuntu distribution detected. Installing Docker for Ubuntu..."
 
     #Install necessary dependencies
