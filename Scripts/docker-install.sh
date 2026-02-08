@@ -62,10 +62,10 @@ ubuntu_install(){
     echo "${green}[+] Docker installation completed.${clear}"
 }
 
-if [ "$osname" -eq "debian" ] 2>/dev/null
+if [ "$osname" = "debian" ] 2>/dev/null
 then
     debian_install
-elif ["$osname" -eq "ubuntu"] 2>/dev/null
+elif [ "$osname" = "ubuntu" ] 2>/dev/null
 then
     ubuntu_install
 else
